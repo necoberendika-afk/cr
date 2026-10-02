@@ -9,3 +9,6 @@ clovercoin.sqlite3-wal
 __pycache__/
 *.db
 .venv/
+__pycache__/
+*.db
+.venv/
