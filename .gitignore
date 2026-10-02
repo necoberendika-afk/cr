@@ -1,0 +1,11 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+clovercoin.sqlite3
+clovercoin.sqlite3-shm
+clovercoin.sqlite3-wal
+.env
+__pycache__/
+*.db
+.venv/
