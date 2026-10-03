@@ -36,9 +36,9 @@ from market import refresh_market
 from charts import create_chart
 import os
 
-# 1. Health check endpoint for Render
+# --- Web Server Setup (Replaces express) ---
 async def handle(request):
-    return web.Response(text="Bot is running!")
+    return web.Response(text="Hello World!")
 
 async def start_web_server():
     app = web.Application()
@@ -46,18 +46,21 @@ async def start_web_server():
     runner = web.AppRunner(app)
     await runner.setup()
     
-    # Render assigns a dynamic port via the PORT environment variable
-    port = int(os.getenv("PORT", 10000))
+    # Use process.env.PORT equivalent in Python
+    port = int(os.getenv("PORT", 4000))
     site = web.TCPSite(runner, "0.0.0.0", port)
     await site.start()
+    print(f"Example app listening on port {port}")
 
-# 2. Main entrypoint to launch both server and bot
-async def main():
-    await start_web_server()
-    
-    token = os.getenv("DISCORD_TOKEN")
-    if not token:
-        raise SystemExit("Missing DISCORD_TOKEN environment variable.")
+# --- Bot Setup ---
+intents = discord.Intents.default()
+bot = commands.Bot(command_prefix="~", intents=intents)
+
+@bot.event
+async def on_ready():
+    # Start the web server in the background task loop
+    bot.loop.create_task(start_web_server())
+    print(f"Logged in as WEBSITE: {bot.user} (clovercoin)git add bot.py")
 # ==============================================================================
 # VISUAL CONSTANTS & ASSETS
 # ==============================================================================
