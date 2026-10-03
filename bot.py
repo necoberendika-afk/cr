@@ -36,8 +36,9 @@ from market import refresh_market
 from charts import create_chart
 import os
 
+# 1. Health check endpoint for Render
 async def handle(request):
-    return web.Response(text="Bot is online!")
+    return web.Response(text="Bot is running!")
 
 async def start_web_server():
     app = web.Application()
@@ -45,11 +46,18 @@ async def start_web_server():
     runner = web.AppRunner(app)
     await runner.setup()
     
-    # Render automatically sets the PORT environment variable
+    # Render assigns a dynamic port via the PORT environment variable
     port = int(os.getenv("PORT", 10000))
     site = web.TCPSite(runner, "0.0.0.0", port)
     await site.start()
 
+# 2. Main entrypoint to launch both server and bot
+async def main():
+    await start_web_server()
+    
+    token = os.getenv("DISCORD_TOKEN")
+    if not token:
+        raise SystemExit("Missing DISCORD_TOKEN environment variable.")
 # ==============================================================================
 # VISUAL CONSTANTS & ASSETS
 # ==============================================================================
