@@ -15,6 +15,7 @@ import re
 import traceback
 from typing import Optional, Literal
 
+from aiohttp import web
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -33,6 +34,21 @@ import database as db
 from database import DB_LOCK, connect, now_iso
 from market import refresh_market
 from charts import create_chart
+import os
+
+async def handle(request):
+    return web.Response(text="Bot is online!")
+
+async def start_web_server():
+    app = web.Application()
+    app.router.add_get("/", handle)
+    runner = web.AppRunner(app)
+    await runner.setup()
+    
+    # Render automatically sets the PORT environment variable
+    port = int(os.getenv("PORT", 10000))
+    site = web.TCPSite(runner, "0.0.0.0", port)
+    await site.start()
 
 # ==============================================================================
 # VISUAL CONSTANTS & ASSETS
@@ -49,6 +65,8 @@ DECIMAL_SATOSHI = Decimal("0.00000001")
 
 # Fast in-memory cache for autocomplete and zero-latency lookups
 COIN_CACHE: list[dict] = []
+
+
 
 
 # ==============================================================================
