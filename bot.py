@@ -58,9 +58,11 @@ bot = commands.Bot(command_prefix="~", intents=intents)
 
 @bot.event
 async def on_ready():
-    # Start the web server in the background task loop
+    # START THE WEB SERVER HERE
     bot.loop.create_task(start_web_server())
-    print(f"Logged in as WEBSITE: {bot.user} (clovercoin)git add bot.py")
+    
+    print(f"Logged in as {bot.user}")
+    # ... keep the rest of your existing on_ready code here ...
 # ==============================================================================
 # VISUAL CONSTANTS & ASSETS
 # ==============================================================================
